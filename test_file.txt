@@ -1,0 +1,9 @@
+Controller
+
+-----------------------
+framework_util
+-----------------------
+
+train_model():
+	l = framework_util.load_loader(src_tensor, targ_tensor)
+	model.train(l)
