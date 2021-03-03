@@ -14,6 +14,17 @@ class Solution {
         return max;
     }
     
+    private int trapUsingBruteForce(int []height){
+        int heightCumulative = 0;
+        for(int i=0; i<height.length; i++){
+            int leftMax = getMaxLeft(i, height);
+            int rightMax = getMaxRight(i, height);
+            int heightBox = Math.min(leftMax, rightMax) - height[i]; // subtract current height
+            heightCumulative += heightBox;
+        }
+        return heightCumulative;
+    }
+    
     private int trapUsingSuffixAndPrefix(int[] height){
         int heightCumulative = 0;
         
@@ -49,13 +60,7 @@ class Solution {
         if(height.length <= 1) return 0;
         
         // Brute Force. -> O(n^2)
-        int heightCumulative = 0;
-        // for(int i=0; i<height.length; i++){
-        //     int leftMax = getMaxLeft(i, height);
-        //     int rightMax = getMaxRight(i, height);
-        //     int heightBox = Math.min(leftMax, rightMax) - height[i]; // subtract current height
-        //     heightCumulative += heightBox;
-        // }
+        // heightCumulative = trapUsingBruteForce(height);
         
         // Prefixes & Suffixes -> O(n) Space, O(n) Time Complexity
         heightCumulative = trapUsingSuffixAndPrefix(height);
