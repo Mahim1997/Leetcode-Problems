@@ -87,6 +87,28 @@ class Solution {
         return cumulative_height;
     }
 	
+	// Cleaner code (with respect to readability)
+	int trapUsing2PointersCleanCode(int[] height){
+		int left = 0, right = height.length - 1;
+		int leftMax = 0, rightMax = 0;
+		int cumulativeHeight = 0;
+		while(left < right){
+			if(height[left] < height[right]){
+				// Left has a smaller height, so, choose this to fill first.
+				leftMax = Math.max(leftMax, height[left]); // Recompute the left maximum i.e. lmax(0, ..., i)
+				cumulativeHeight += (leftMax - height[left]); // Can also be 0
+				left++; // Move the left ptr.
+			}
+			else{
+				// Right has a smaller height, so filling from suffixes i.e. rmax(i, ..., n-1)
+				rightMax = Math.max(rightMax, height[right]);
+				cumulativeHeight += (rightMax - height[right]);
+				right--;
+			}
+		}
+		return cumulativeHeight;
+	}
+	
     public int trap(int[] height) {
         if(height.length <= 1) return 0;
 		int heightCumulative;
@@ -99,7 +121,8 @@ class Solution {
         
 		// Using two pointers approach.
 		// Min of two monotonically increasing functions -> can use 2 pointers approach.
-		heightCumulative = trapUsing2Pointers(height);
+		// heightCumulative = trapUsing2Pointers(height);
+		heightCumulative = trapUsing2PointersCleanCode(height);
 		
 		return heightCumulative;
     }
