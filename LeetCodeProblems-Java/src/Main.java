@@ -30,20 +30,23 @@ public class Main {
         });
     }
 
+    public static void printMultipleList(List<List<Integer>> ans){
+        ans.forEach(list -> printSingleList(list));
+                // list.stream().map(x -> String.valueOf(x)).collect(Collectors.joining(", ")));
+    }
+
     public static void main(String[] args) {
         Solution solution = new Solution();
 
-        int[] nums = {1,2,3};
-//        int[] nums = {6,2,1,5,4,3,0};
-//        int[] nums = {2,3,1};
-//        int[] nums = {2,3,1,3,3};
+        int []nums = {10,1,2,7,6,1,5};
+        int target = 8;
 
         printArray(nums);
+        System.out.println("Target: " + target);
 
-        solution.nextPermutation(nums);
+        List<List<Integer>> ans = solution.combinationSum2(nums, target);
 
-//        System.out.println("After solution.nextPermutation() call. ");
-        printArray(nums);
+        printMultipleList(ans);
 
     }
 }

@@ -25,8 +25,9 @@ class Solution {
             // else recurse on using this ith index.
             combinations.add(candidates[i]); // push this element.
 
-            // backtrack using THIS ith index as idx, and new target as removing ith candidate
-//            new_target -= candidates[i]; // this doesn't give results correctly
+            // backtrack using THIS ith index as idx, and new target as removing ith candidate -> if multiple times same taken.
+			// i+1 for ith idx if only once taken.
+			// Can also use a visited[] flag.
             backtrack(whole_ans, combinations, candidates, i+1, new_target - candidates[i]);
 
             combinations.remove(combinations.size() - 1); // remove last element.
