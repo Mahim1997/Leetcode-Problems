@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+// Next Permutation Problem
+
 class Solution {
 
     int getRightMostIndexUnsorted(int[] nums){
