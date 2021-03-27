@@ -2,61 +2,61 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+/*
+Given an array nums of distinct integers, return all the possible permutations.
+You can return the answer in any order.
+
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+ */
+
+/*
+First we can sort.
+Then, we can follow a tree-DFS order.
+
+For each index, we can take that many elements.
+Then remove that element, move to the forward index.
+ */
 class Solution {
+    public void backtrack(List<List<Integer>> ans,
+                          List<Integer> current_ans,
+                          int index,
+                          int []nums,
+                          List<Integer> valid_nums){
 
-    private void backtrack(List<List<Integer>> whole_ans,
-                           List<Integer> combinations, // one solution list.
-                           int[] candidates,
-                           int idx,
-                           int new_target) {
-//        System.out.println("idx = " + idx + " , new_target = " + new_target);
-        // Base case.
-        if (new_target == 0) {
-            whole_ans.add(new ArrayList<>(combinations));
-            return;
+        if(index == 0){
+            current_ans = new ArrayList<>();
+            for(int x: nums) valid_nums.add(x);
         }
-
-        // Recurse on each idx AND its neighbors
-        for (int i = idx; i < candidates.length; i++) {
-            int num = candidates[i];
-            if (num > new_target) {
-                break; // no need to continue looping.
-            }
-            // else recurse on using this ith index.
-            combinations.add(candidates[i]); // push this element.
-
-            // backtrack using THIS ith index as idx, and new target as removing ith candidate
-//            new_target -= candidates[i]; // this doesn't give results correctly
-            backtrack(whole_ans, combinations, candidates, i+1, new_target - candidates[i]);
-
-            combinations.remove(combinations.size() - 1); // remove last element.
+        for(int i=0; i<nums.length; i++){
+            current_ans.add(valid_nums.get(index));
+            System.out.println("i = " + i + " , index = " + index + " , current_ans = " + current_ans
+            + " , valid_nums = " + valid_nums);
+//                valid_nums.remove(0);
+            index++;
+//                backtrack(ans, current_ans, index, nums, valid_nums);
         }
+        if(index == nums.length - 1){
+            ans.add(new ArrayList<>(current_ans));
+            current_ans.clear();
+        }
+        System.out.println("ans = " + ans);
+
 
     }
 
-    // Using backtracking.
-    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        if (candidates.length == 0) {
-            return null;
-        }
+    public List<List<Integer>> permute(int[] nums) {
+        // Sort
+        Arrays.sort(nums);
 
-        Arrays.sort(candidates); // sort initially.
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> current_ans = new ArrayList<>();
+        List<Integer> valid_nums = new ArrayList<>();
+//        for(int x: nums) valid_nums.add(x);
 
-        List<List<Integer>> whole_ans = new ArrayList<>();
-        List<Integer> combinations = new ArrayList<>();
+        backtrack(ans, current_ans, 0, nums, valid_nums);
 
-        backtrack(whole_ans, combinations, candidates, 0, target);
-
-        return removeDuplicates(whole_ans);
-    }
-
-    private List<List<Integer>> removeDuplicates(List<List<Integer>> whole_ans) {
-        List<List<Integer>> new_ans = new ArrayList<>();
-        for(List<Integer> list: whole_ans){
-            if(!new_ans.contains(list)){
-                new_ans.add(list);
-            }
-        }
-        return new_ans;
+        return ans;
     }
 }
