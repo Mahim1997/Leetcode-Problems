@@ -17,9 +17,16 @@ public class Utils {
                 .collect(Collectors.joining(", ")));
     }
     public static void printMultipleList(List<List<Integer>> ans){
-        ans.forEach(list -> System.out.println(list.stream()
-                        .map(String::valueOf) // x -> String.valueOf(x)
-                        .collect(Collectors.joining(", "))));
+        System.out.println(
+            ans.stream()
+                .map(single_list ->
+                        single_list.stream()
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", "))
+                )
+                .collect(Collectors.joining("\n"))
+        );
+
     }
 
 
