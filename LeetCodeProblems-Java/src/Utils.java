@@ -45,4 +45,15 @@ public class Utils {
         System.out.println(getKeysWithSpecifiedValue(map, right_partition));
     }
 
+    public static void printMatrix(int[][] matrix) {
+        System.out.println(
+            Arrays.stream(matrix)
+                    .map(single_row ->
+                            Arrays.stream(single_row)
+                            .mapToObj(String::valueOf)
+                            .collect(Collectors.joining(", "))
+                    )
+                .collect(Collectors.joining("\n"))
+        );
+    }
 }
