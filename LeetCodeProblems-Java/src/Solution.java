@@ -10,8 +10,7 @@ class Solution {
         int n = matrix[0].length;
 
         List<Integer> list = new ArrayList<>();
-        int row_start=0, col_start=0, row_end = m-1, col_end = n-1;
-        for(row_start=0, col_start=0, row_end = m-1, col_end = n-1
+        for(int row_start=0, col_start=0, row_end = m-1, col_end = n-1
             ;;
             row_start ++, row_end --, col_start ++, col_end --){
             // First row movement
