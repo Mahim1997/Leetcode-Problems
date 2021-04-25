@@ -56,4 +56,44 @@ public class Utils {
                 .collect(Collectors.joining("\n"))
         );
     }
+
+    public static String getMatrixRepresentation(String s) {
+        s = s.replace("[", "{").replace("]", "}");
+        s = "int[][] matrix = " + s + ";";
+        return s;
+    }
+
+    public static int[][] get2DMatrixSequential(int row, int col) {
+        int[][] matrix = new int[row][col];
+        int element = 10;
+        for(int i=0; i<matrix.length; i++){
+            for(int j=0; j<matrix[i].length; j++){
+               matrix[i][j] = (++element);
+            }
+        }
+        return matrix;
+    }
+    public static String getMatrixLeetcodeForm(int[][] matrix){
+        return Arrays.stream(matrix)
+                .map(single_arr -> Arrays.stream(single_arr)
+                        .mapToObj(x -> String.valueOf(x))
+                        .collect(Collectors.joining(",", "[", "]"))
+                ).collect(Collectors.joining(",", "[", "]"));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
