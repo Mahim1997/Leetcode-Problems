@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -6,16 +7,16 @@ import java.util.*;
  */
 public class Main {
 
+    static void printArary(int []arr){
+        System.out.println(
+            Arrays.stream(arr)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(","))
+        );
+    }
+
     public static void main(String[] args) {
-        String s = "[[1]]";
-        s = Utils.getMatrixRepresentation(s);
-        System.out.println(s);
-
-        int[][] matrix = {{1}};
-        int target = 1;
-
-        Utils.printMatrix(matrix);
-        boolean b = new Solution().searchMatrix(matrix, target);
-        System.out.println(b);
+        int[] arr = {1,2,3,4,5,7,8};
+        printArary(arr);
     }
 }
