@@ -56,10 +56,18 @@ public class Utils {
                 .collect(Collectors.joining("\n"))
         );
     }
+    public static void printMatrixCharacter(char[][] matrix){
+        for(int i=0; i<matrix.length; i++){
+            for(int j=0; j<matrix[i].length; j++){
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 
     public static String getMatrixRepresentation(String s) {
-        s = s.replace("[", "{").replace("]", "}");
-        s = "int[][] matrix = " + s + ";";
+        s = s.replace("[", "{").replace("]", "}").replace("\"", "\'");
+        s = "char[][] matrix = " + s + ";";
         return s;
     }
 
