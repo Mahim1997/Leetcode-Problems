@@ -16,9 +16,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        char[][] matrix = {{'1','0','1','0','0'},{'1','0','1','1','1'},{'1','1','1','1','1'},{'1','0','0','1','0'}};
+        String s = "mbaocd";
+        s.toCharArray().sort(
 
-        Solution sol = new Solution();
-        sol.maximalRectangle(matrix);
+        );
+        System.out.println(s);
+
     }
 }
