@@ -1,4 +1,25 @@
 class Solution {
+	/*
+	// finding pivot code
+	int findMin(vector<int>& nums) {
+        
+        int l, r, mid =0, n= nums.size();
+        
+        l=0, r= n-1;
+        
+        while(l<r){
+            
+            mid = l+(r-l)/2;
+            
+            if(nums[mid] > nums[r])
+                l = mid+1;
+            else
+                r = mid;
+        }
+        
+        return nums[l];
+    }
+	*/
     private int getIdxPivot(int[] nums, int left, int right){
         // Check left & right corner cases separately ?
         if(nums[0] > nums[1]) return 0; // left-most is the pivot
