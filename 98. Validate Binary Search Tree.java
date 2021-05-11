@@ -54,4 +54,33 @@ class Solution {
             inorder(root.right, list);
         }
     }
+	
+// Faster implementation
+    private int prev = -1; // changes in between
+    private boolean inorderCheck(TreeNode root, int prev){
+        
+        // Inorder traversal checking.
+        boolean ans = true;
+        
+        if(root.left != null){
+            // use the recursive calling [AND]
+            ans = ans & inorderCheck(root.left);
+        }
+        // self checking with previous val.
+        if(prev == -1)
+            prev = root.val; // first time setting
+        else{
+            if(prev >= root.val){ // violation checking
+                return false;
+            }
+            prev = root.val; // set previous to current val
+        }
+        
+        if(root.right != null){
+            //same checking as left subtree
+            ans = ans & inorderCheck(root.right);
+        }
+        
+        return ans;
+    }
 }
