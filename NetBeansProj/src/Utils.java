@@ -54,7 +54,7 @@ public class Utils {
         }
     }
 
-    private static int[] generateArrayFromStr(String s) {
+    public static int[] generateArrayFromString(String s) {
         if (s == null) {
             return null;
         } else if (s.trim().equals("")) {
@@ -80,7 +80,7 @@ public class Utils {
         return Arrays.stream(s.trim()
                 .replace(" ", "")
                 .split("],\\["))
-                .map(Utils::generateArrayFromStr)
+                .map(Utils::generateArrayFromString)
                 .collect(Collectors.toList())
                 .toArray(new int[0][0]);
     }
@@ -89,6 +89,40 @@ public class Utils {
         System.out.println(queue.stream()
                 .map(x -> String.valueOf("(" + x[0] + "," + x[1] + ")"))
                 .collect(Collectors.joining(", ")));
+    }
+
+    public static void printListNode(ListNode head) {
+        ListNode temp = head;
+        while (temp != null) {
+            System.out.print(temp.val);
+            if(temp.next != null)
+                System.out.print(", ");
+            
+            temp = temp.next;
+        }
+        System.out.println("");
+    }
+
+    public static ListNode getListNodeFromString(String s) {
+        int[] arr = Utils.generateArrayFromString(s);
+
+        ListNode head = null;
+        ListNode temp = null;
+
+        for (int i = 0; i < arr.length; i++) {
+//            System.out.println("Doing for i = " + i + " , arr[i] = " + arr[i]);
+            if (i == 0) {
+                head = new ListNode(arr[i]);
+                temp = head;
+            } else {
+                temp.next = new ListNode(arr[i]);
+                temp = temp.next;
+            }
+        }
+        
+
+        // one dummy node.
+        return head;
     }
 
 }
