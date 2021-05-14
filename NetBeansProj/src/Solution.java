@@ -1,59 +1,49 @@
 
 class Solution {
-    private void printNode(ListNode head){
+
+    private void printNode(ListNode head) {
         ListNode temp = head;
-        while(temp.next != null){
+        while (temp.next != null) {
             System.out.print(temp.val + ", ");
         }
         System.out.println("");
     }
-    
-    public ListNode partition(ListNode head, int x) {
-        if(head == null || head.next == null)
-            return head;
-        
-        ListNode t1 = new ListNode(-1);
-        ListNode t2 = new ListNode(-2);
-        
-        // smaller than in t1
-        ListNode newHead = t1;
-        ListNode newHead2 = t2;
-        
-        ListNode temp = head;
-        while(temp != null){
-            if(temp.val < x){
-                t1.next = new ListNode(temp.val);
-                t1 = t1.next;
-            }
-            temp = temp.next;
-        }
-        
-        // >= in t2
-        temp = head;
-        while(temp != null){
-            if(temp.val >= x){
-                t2.next = new ListNode(temp.val);
-                t2 = t2.next;
-            }
-            temp = temp.next;
-        }
-        
-        
-        // merge both
-//        Utils.printListNode(newHead);
-//        Utils.printListNode(newHead2);
-        
-        
-        newHead = newHead.next;
-        
-        newHead2 = newHead2.next;
-        
-        if(newHead == null){ // first Node doesn't exist.
-            return newHead2;
-        }
-        
-        t1.next = newHead2;
 
-        return newHead;
+    public ListNode partition(ListNode head, int x) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode leftListNode = new ListNode(-1);
+        ListNode rightListNode = new ListNode(-2);
+
+        // smaller than in t1
+        ListNode temp = head;
+
+        ListNode leftHead = leftListNode;
+        ListNode rightHead = rightListNode;
+
+        // one pass
+        while (temp != null) {
+            if (temp.val < x) { // < x condition
+                leftListNode.next = new ListNode(temp.val);
+                leftListNode = leftListNode.next;
+            } else { // >= x condition
+                rightListNode.next = new ListNode(temp.val);
+                rightListNode = rightListNode.next;
+            }
+            temp = temp.next;
+        }
+
+        leftHead = leftHead.next;
+        rightHead = rightHead.next;
+
+        if (leftHead == null) { // first list i.e. < x doesn't exist.
+            return rightHead;
+        }
+
+        leftListNode.next = rightHead;
+
+        return leftHead;
     }
 }
