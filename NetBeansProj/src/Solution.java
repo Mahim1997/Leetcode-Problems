@@ -1,49 +1,95 @@
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
+
 class Solution {
 
-    private void printNode(ListNode head) {
-        ListNode temp = head;
-        while (temp.next != null) {
-            System.out.print(temp.val + ", ");
-        }
-        System.out.println("");
+    private int[] mergeTwoIntervals(int[] arr1, int[] arr2) {
+        return new int[]{Math.min(arr1[0], arr2[0]),
+            Math.max(arr1[1], arr2[1])};
     }
 
-    public ListNode partition(ListNode head, int x) {
-        if (head == null || head.next == null) {
-            return head;
+    private boolean doesTwoIntervalsCoincide(int[] arr1, int[] arr2) {
+        // if first interval's end time lies after second's start time then coincides.
+        return (arr1[1] > arr2[0]);
+    }
+
+    public int[][] merge(int[][] intervals) {
+
+        if (intervals.length == 1) {
+            return intervals;
         }
 
-        ListNode leftListNode = new ListNode(-1);
-        ListNode rightListNode = new ListNode(-2);
+        // Sort wrt end times.
+        Arrays.sort(intervals, (int[] arr1, int[] arr2) -> (arr1[1] - arr2[1]));
+        
+        System.out.println("AFTER SORTING:");
+        Utils.printMatrixInteger(intervals);
+        System.out.println("---------------------");
 
-        // smaller than in t1
-        ListNode temp = head;
+        Queue<int[]> queue = new LinkedList<>();
 
-        ListNode leftHead = leftListNode;
-        ListNode rightHead = rightListNode;
+        // Merge two at a time.
+        int leftIdx = 0;
+        int secondIdx = 1;
 
-        // one pass
-        while (temp != null) {
-            if (temp.val < x) { // < x condition
-                leftListNode.next = new ListNode(temp.val);
-                leftListNode = leftListNode.next;
-            } else { // >= x condition
-                rightListNode.next = new ListNode(temp.val);
-                rightListNode = rightListNode.next;
+        queue.add(intervals[0]);
+
+        List<int[]> list = new ArrayList<>();
+
+        while (!queue.isEmpty()) {
+            int[] headQueueInterval = queue.remove();
+
+            // end-point is reached.
+            if (leftIdx == intervals.length - 1) {
+                break;
             }
-            temp = temp.next;
+
+            // second interval checking.
+            boolean willMerge = false;
+            for (secondIdx = leftIdx + 1; secondIdx < intervals.length; secondIdx++) {
+                if (doesTwoIntervalsCoincide(headQueueInterval, intervals[secondIdx])) {
+                    int[] newInterval = mergeTwoIntervals(headQueueInterval, intervals[secondIdx]);
+                    System.out.println("New interval is " + Arrays.toString(newInterval));
+                    queue.add(newInterval);
+                    willMerge = true;
+                } else {
+                    System.out.println("Incrementing leftIdx from leftIdx = " + leftIdx + " to " + (leftIdx + 1));
+                    leftIdx++;
+                    if (willMerge) {
+                        list.add(queue.peek());
+                    } else {
+                        list.add(intervals[leftIdx]);
+                    }
+                    break;
+                }
+            }
+
+//            // afterwards
+//            leftIdx++;
+//            queue.add(intervals[leftIdx]);
+        }
+//        Utils.printQueueIntegerArray(queue);
+
+        // last index checking.
+        if (!doesTwoIntervalsCoincide(list.get(list.size() - 1), intervals[intervals.length - 1])) {
+            list.add(intervals[intervals.length - 1]);
+        } else {
+            int[] mergedInterval = mergeTwoIntervals(list.get(list.size() - 1), intervals[intervals.length - 1]);
+            list.remove(list.size() - 1);
+            list.add(mergedInterval);
         }
 
-        leftHead = leftHead.next;
-        rightHead = rightHead.next;
+        System.out.println(list.stream()
+                .map(x -> "(" + x[0] + "," + x[1] + ")")
+                .collect(Collectors.joining(","))
+        );
+        return intervals;
 
-        if (leftHead == null) { // first list i.e. < x doesn't exist.
-            return rightHead;
-        }
-
-        leftListNode.next = rightHead;
-
-        return leftHead;
     }
 }

@@ -1,15 +1,11 @@
 
 class LRUCache {
-//    private int[] 
-    // need to have some kind of time keeping timesteps, will always be sorted.
-    
-    
+    // double headed linkedlist
     public LRUCache(int capacity) {
 
     }
 
     public int get(int key) {
-
         return -1;
     }
 

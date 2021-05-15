@@ -1,18 +1,19 @@
+
 public class NetBeansProj {
 
     public static void main(String[] args) {
-//        String s = "[[1,3],[2,6],[5,14],[12,18]]";
-//        int[][] mat = Utils.generateMatrixFromStringLeetcodeStringInput(s);
-////        Utils.printMatrixInteger(mat);
-//        System.out.println("----------------------------------");
-//        int[][] merge = new Solution().merge(mat);
-//        System.out.println("===============================");
-//        Utils.printMatrixInteger(merge);
+        String s = "[[1,3],[2,6],[5,14],[12,18]]";
+        int[][] mat = Utils.generateMatrixFromStringLeetcodeStringInput(s);
+//        Utils.printMatrixInteger(mat);
+        System.out.println("----------------------------------");
+        int[][] merge = new Solution().merge(mat);
+        System.out.println("===============================");
+        Utils.printMatrixInteger(merge);
 
-        LRUCache_146();
+//        LRUCache_Problem146();
     }
-    
-    private static void LRUCache_146(){
+
+    private static void LRUCache_Problem146() {
         LRUCache lRUCache = new LRUCache(2);
         lRUCache.put(1, 1); // cache is {1=1}
         lRUCache.put(2, 2); // cache is {1=1, 2=2}
@@ -23,7 +24,6 @@ public class NetBeansProj {
         lRUCache.get(1);    // return -1 (not found)
         lRUCache.get(3);    // return 3
         lRUCache.get(4);    // return 4
-    
-        
+
     }
 }
