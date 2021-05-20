@@ -13,6 +13,9 @@ class Solution {
                     if(dfsSearch(board, i, j, word, 1, visitedMap) == true){
                         return true; // elif false -> continue with next matched
                     }
+//					else{
+//						continue;
+//					}
                 }
             }
         }
@@ -106,5 +109,56 @@ class Solution {
         return (left || right || up || down);
     }
     
+	
+	// Using IF-ELSE case
+	private boolean dfsSearch(char[][] board, int i, int j, String word,
+                             int level){
+        // System.out.println("At level = " + level + " , i = " + i + " , j = " + j);
+        
+
+        // borders checking
+        if(i < 0 || j < 0 || i >= board.length || j >= board[0].length){
+            // System.out.println("RETURNING FALSE boundary check");
+            return false;
+        }
+        
+        // System.out.println(">> visitedMap[i][j] = " + visitedMap[i][j]);
+        
+        // visited check [already visited before.]
+        if(board[i][j] == '$'){ // visited flag done in char array
+            return false;
+        }
+        // char checking [level starts at level=1]
+        if(board[i][j] != word.charAt(level-1)){
+            return false;
+        }
+
+        // all false checking conditions will be done above.
+        // all satisfied or not checking [final state found !]
+        if(level == word.length()){ // check for true case after false checks over
+            return true;
+        }
+        
+        
+        // visitedMap[i][j] = true; // visited flag: set
+        char prevChar = board[i][j];
+        board[i][j] = '$'; // inplace visited flag: set
+        
+        // recursive checking [DFS: backtracking]
+        
+        // left checking [border checking done above]
+        if(dfsSearch(board, i, j-1, word, level+1)
+            || dfsSearch(board, i, j+1, word, level+1)
+            || dfsSearch(board, i-1, j, word, level+1)
+            || dfsSearch(board, i+1, j, word, level+1)){
+            return true;
+        }
+        
+        
+        // visitedMap[i][j] = false; // visited flag: reset
+        board[i][j] = prevChar; // inplace visited flag: reset
+        
+        return false;
+    }
 }
 
