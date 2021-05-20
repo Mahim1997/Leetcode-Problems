@@ -30,7 +30,7 @@ class Solution:
         print(f"sorted nums = {nums}")
         ans = [] # new list.
         for i in range(0, len(nums) - 2): ## upto less than last 2 elements.
-            if (i>0) and (nums[i-1] == nums[i]): continue
+            if (i>0) and (nums[i-1] == nums[i]): continue # duplicates skipping
             a = nums[i]
             target = target_outside - a
             _2lists = self.twoSumSorted(nums[i+1:], target=target) ## skip this index
