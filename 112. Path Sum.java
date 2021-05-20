@@ -14,6 +14,21 @@
  * }
  */
 class Solution {
+	// One functtion only
+	public boolean hasPathSum(TreeNode root, int targetSum) {    
+        if(root == null){
+            return false;
+        }
+        if((root.left == null) && (root.right == null)){
+            return (root.val == targetSum);
+        }
+		// subtract by current root's value
+        return  hasPathSum(root.left, targetSum-root.val)||
+                hasPathSum(root.right, targetSum-root.val);
+    }
+    
+	
+	
     public boolean hasPathSum(TreeNode root, int targetSum) {
         if(root == null){
             return false;
