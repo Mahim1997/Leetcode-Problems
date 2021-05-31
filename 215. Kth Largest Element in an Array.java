@@ -9,11 +9,20 @@ class Solution {
         PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // auto min heap ?
         
         for(int x: nums){
+            
+            
             if(minHeap.size() > k){
+                // check if number is smaller than minimum, then dont do anything
+                // optimization
+                if((!minHeap.isEmpty()) && (x < minHeap.peek())){continue;}
                 minHeap.poll();
+                minHeap.add(x);
+            }else{            
+                minHeap.add(x);
             }
-            minHeap.add(x);
         }        
+        
+
         
         int nElementsRemove = minHeap.size() - k;
         
@@ -22,7 +31,7 @@ class Solution {
         }
         
         // now, top should be the answer ?
-        System.out.println(minHeap);
+
         
         
         return minHeap.peek();
