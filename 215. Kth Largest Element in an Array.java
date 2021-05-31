@@ -20,6 +20,7 @@ class Solution {
             }else{            
                 minHeap.add(x);
             }
+			
         }        
         
 
