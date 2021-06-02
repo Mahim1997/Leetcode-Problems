@@ -7,25 +7,36 @@ import java.util.stream.Collectors;
 // CTRL + ALT + L -> Indent
 
 public class Main {
-    static void printCombinations(List<Integer> list){
 
-        Integer[] nums = {3,2,3,1,2,4,5,5,6};
-        int k = 4;
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>(k);
 
-//        new int[]{1, 2, 3};
+    static void printPermutations(List<Integer> list){
 
-        Arrays.stream(nums)
-                .flatMap(x -> (minHeap.size() > k) ? (minHeap.poll(); minHeap.add(x);) : minHeap.add(x));
+        if(list.size() == 1){
+            System.out.println(list.get(0));
+            return;
+        }
+
+        for(int i=0; i<list.size(); i++){
+            // remove
+            int temp = list.get(i);
+            System.out.print("<" + list.get(i) + ", ");
+            list.remove(i);
+
+            // recurse OR backtrack
+            printPermutations(new ArrayList<>(list));
+
+            // add back
+            list.add(i, temp);
+        }
     }
 
     public static void main(String[] args) {
 
-        Integer[] arr = {1,2,3,4,5};
+        Integer[] arr = {1, 2, 3}; // ,3,4,5
 
         List<Integer> list = Arrays.stream(arr).collect(Collectors.toList());
 
-        printCombinations(list);
+        printPermutations(list);
 
     }
 }
