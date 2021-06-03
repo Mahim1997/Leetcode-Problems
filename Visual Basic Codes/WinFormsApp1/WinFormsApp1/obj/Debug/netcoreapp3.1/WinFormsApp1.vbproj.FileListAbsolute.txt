@@ -1,0 +1,15 @@
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.vbproj.AssemblyReference.cache
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.Form1.resources
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.vbproj.GenerateResource.cache
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.AssemblyInfoInputs.cache
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.AssemblyInfo.vb
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.vbproj.CoreCompileInputs.cache
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\bin\Debug\netcoreapp3.1\WinFormsApp1.exe
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\bin\Debug\netcoreapp3.1\WinFormsApp1.deps.json
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\bin\Debug\netcoreapp3.1\WinFormsApp1.runtimeconfig.json
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\bin\Debug\netcoreapp3.1\WinFormsApp1.runtimeconfig.dev.json
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\bin\Debug\netcoreapp3.1\WinFormsApp1.dll
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\bin\Debug\netcoreapp3.1\WinFormsApp1.pdb
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.dll
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.pdb
+F:\Leetcode-Programming-Things\Leetcode-Problems\Visual Basic Codes\WinFormsApp1\WinFormsApp1\obj\Debug\netcoreapp3.1\WinFormsApp1.genruntimeconfig.cache
