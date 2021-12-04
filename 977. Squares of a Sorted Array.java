@@ -1,10 +1,35 @@
 class Solution {
     public int[] sortedSquares(int[] nums) {
         // return sortedSquaresUsingNaiveMethod(nums);
-        return sortedSquaresUsingDoublePointers(nums);
+        // return sortedSquaresUsingDoublePointers(nums);
+        return doublePointersReverse(nums);
+    }
+    
+    private int[] doublePointersReverse(int[] nums){
+        int[] ans = new int[nums.length];
+        
+        int idx = ans.length - 1;
+        int left = 0, right = nums.length - 1;
+        int squareLeft, squareRight;
+        while(left <= right){
+            squareLeft = nums[left]*nums[left];
+            squareRight = nums[right]*nums[right];
+            if(squareLeft >= squareRight){ // put the bigger in the end
+                ans[idx] = squareLeft;
+                left++;
+            }
+            else{
+                ans[idx] = squareRight;
+                right--;
+            }
+            idx--; // go backwards
+            
+        }
+        
+        return ans;
     }
 
-    private int getIndexSmallestNumber(int[] nums){
+    private int getIndexSmallestNumberLinear(int[] nums){
         for(int i=1; i<nums.length; i++){
             if((nums[i-1] < 0) && (nums[i] >= 0)){
                 // return i;
@@ -33,7 +58,7 @@ class Solution {
         }
         
         // Find index of smallest number.
-        int idx = getIndexSmallestNumber(nums);
+        int idx = getIndexSmallestNumberLinear(nums);
         int left = idx, right = idx+1;
         
         if(idx == nums.length - 1){ // 
