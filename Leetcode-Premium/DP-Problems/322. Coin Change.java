@@ -1,22 +1,11 @@
 class Solution {
     public int coinChange(int[] coins, int amount) {
-        // sorting ? 
+        // sorting ? NOT NEEDED
         if(amount == 0)
             return 0;
         
-        Arrays.sort(coins);
-        for(int coin: coins){
-            System.out.print(coin + " ");
-        }
-        System.out.println("");
-        
-        if(coins[0] > amount){ // amount is smaller than smallest coin
-            return -1;
-        }
-        
         Map<Integer, Integer> map = new HashMap<>();
         int ans = dp(coins, amount, map);
-        // System.out.println("ans = " + ans);
         return (ans == Integer.MAX_VALUE) ? -1 : ans;
     }
     
