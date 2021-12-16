@@ -4,6 +4,10 @@ class Solution {
         int right = nums.length - 1;
         int mid;
         
+		// out of bounds check to improve time complexity for some cases
+		if((target < nums[left]) || (target > nums[right]))
+			return -1;
+		
         while(left <= right){
             mid = left + (right - left)/2; // avoid overflow
             if(nums[mid] == target){
