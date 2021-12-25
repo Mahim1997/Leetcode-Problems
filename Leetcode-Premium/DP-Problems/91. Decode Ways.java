@@ -26,9 +26,37 @@ class Solution {
                     + dp(i - 2) // if s.substr(i-2, i+1)
             & doesn't have trailing zeros, and [1, 26]
         */
-        this.cache = new HashMap<>();
-        this.str = s;
-        return dp(s.length() - 1);
+        // this.cache = new HashMap<>();
+        // this.str = s;
+        // return dp(s.length() - 1);
+        
+        return bottomUp(s);
+    }
+    
+    private int bottomUp(String s){
+        int strlen = s.length();
+        if(strlen == 1){
+            if(isValid(s))
+                return 1;
+        }
+        
+        int[] dp = new int[strlen + 1];
+        dp[0] = 1; // -1 is 1
+        
+        for(int i=1; i<dp.length; i++){
+            int oneVal = 0, twoVal = 0;
+            if(isValid(s.substring(i-1, i))){
+                oneVal = dp[i - 1];
+            }
+            if(i > 1){
+                if(isValid(s.substring(i-2, i))){
+                    twoVal = dp[i - 2];
+                }
+            }
+            dp[i] = oneVal + twoVal;
+        }
+        
+        return dp[strlen];
     }
     
     private int dp(int index){
