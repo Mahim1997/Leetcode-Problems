@@ -10,24 +10,24 @@ class Solution {
             return 1; // always one path.
         }
         
+        // NO NEED FOR prevRow as well.
+        
         int[] currentRow = new int[nCols];
-        int[] prevRow = new int[nCols];
+        // int[] prevRow = new int[nCols];
         
         for(int col=0; col<nCols; col++){
             // initially row_0 all are 1s
-            prevRow[col] = 1;
+            // prevRow[col] = 1;
             currentRow[col] = 1;
         }
         
         // recursion.
         for(int row=1; row<nRows; row++){       // start with idx = 1
             for(int col=1; col<nCols; col++){   // start with idx = 1
-                currentRow[col] = prevRow[col] + currentRow[col - 1];
+                currentRow[col] = currentRow[col] + currentRow[col - 1];
             }
             // replace with prevRow <---> currentRow
-            prevRow = currentRow;
-            
-            // printArray(currentRow); // DEBUGGING
+            // prevRow = currentRow;
         }
         
         return currentRow[nCols - 1];
