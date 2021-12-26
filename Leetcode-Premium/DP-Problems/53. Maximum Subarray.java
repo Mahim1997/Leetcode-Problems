@@ -5,22 +5,16 @@ class Solution {
         return kadanesAlgorithm(nums);
     }
     private int kadanesAlgorithm(int[] nums){
-        if(nums.length == 1)
-            return nums[0];
+        int globalMax = Integer.MIN_VALUE;
+        int maxCurrent = 0;
         
-        int currentSubArrSum = nums[0];
-        int maxSoFar = nums[0];
-        
-        for(int i=1; i<nums.length; i++){
-            // currentSubArrSum -> updates for _i_th element
-            int onlyNum = nums[i];
-            int takeSubArray = currentSubArrSum + nums[i];
-            int bestSubArr_i = Math.max(onlyNum, takeSubArray);
-            currentSubArrSum = bestSubArr_i;
-            
-            maxSoFar = Math.max(maxSoFar, currentSubArrSum);
+        for(int num: nums){
+            // take OR don't take num
+            maxCurrent = Math.max(num, num+maxCurrent);
+            globalMax = Math.max(globalMax, maxCurrent);
         }
-        return maxSoFar;
+        
+        return globalMax;
     }
     
     private int dpLinearTimeLinearSpace(int[] nums){
