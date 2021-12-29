@@ -18,7 +18,7 @@ class Solution {
         
         int ans = 0;
         for(int i=2; i<n; i++){
-            ans = Math.max(onePrev, twoPrev);
+            ans = Math.max(onePrev, twoPrev + nums[i]);
             twoPrev = onePrev;
             onePrev = ans;
         }
