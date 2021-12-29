@@ -39,6 +39,34 @@ class Solution {
         if(root == null)
             return null;
         
+        // return bfs(root);
+        Node node = root;
+        recursive(node);
+        return root;
+    }
+    
+    private void recursive(Node root){
+        if(root == null)
+            return;
+        
+        if(root.left != null){
+            if(root.right != null){
+                root.left.next = root.right;
+                if(root.next == null){
+                    root.right.next = null;
+                }else{
+                    root.right.next = root.next.left;
+                }
+            }
+        }
+        recursive(root.left);
+        recursive(root.right);
+    }
+    
+    private Node bfs(Node root){
+        if(root == null)
+            return null;
+        
         // BFS traversal
         Node temp = root;
         // be default next pointers point to null
