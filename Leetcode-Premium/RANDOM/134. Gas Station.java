@@ -2,22 +2,47 @@ class Solution {
     public int canCompleteCircuit(int[] gases, int[] costs) {
         int numSteps = gases.length;
         
-        // this.initializeDP();
-        int[] diff = new int[numSteps];
-        // naive approach ... will extend
-        for(int i=0; i<numSteps; i++){
-            diff[i] = gases[i] - costs[i];
+        int sumGases = 0, sumCosts = 0;
+        for(int i=0; i<gases.length; i++){
+            sumGases += gases[i];
+            sumCosts += costs[i];
         }
         
-        for(int idx=0; idx<numSteps; idx++){
-            if(diff[idx] < 0){
-                continue;
-            }
-            if(canReachEnd(diff, idx) == true){
-                return idx;
+        // not possible
+        if(sumGases < sumCosts)
+            return -1;
+        
+        
+        // guaranteed possible, hence any startIdx that reaches till the end without going negative cumulative sum, that starting Idx will be the answer.
+        int startIdx = 0;
+        int total = 0;
+        for(int i=0; i<numSteps; i++){
+            int diff = gases[i] - costs[i];
+            total += diff;
+            
+            if(total < 0){
+                startIdx = i + 1;
+                total = 0;
             }
         }
-        return -1;
+        return startIdx;
+        
+//         // this.initializeDP();
+//         int[] diff = new int[numSteps];
+//         // naive approach ... will extend
+//         for(int i=0; i<numSteps; i++){
+//             diff[i] = gases[i] - costs[i];
+//         }
+        
+//         for(int idx=0; idx<numSteps; idx++){
+//             if(diff[idx] < 0){
+//                 continue;
+//             }
+//             if(canReachEnd(diff, idx) == true){
+//                 return idx;
+//             }
+//         }
+//         return -1;
     }
     
     private boolean canReachEnd(int[] diff, int idx){
