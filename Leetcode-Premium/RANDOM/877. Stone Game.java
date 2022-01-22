@@ -18,11 +18,7 @@ class Solution {
         this.dp = new int[this.numPiles][this.numPiles][2];
         for(int[][] _2D: dp){
             for(int[] _1D: _2D){
-                for(int x: _1D){
-                    // piles.len = 500, piles[i] = 500 MAX
-                    // worst case, sum = 250000
-                    x = UNASSIGNED; // take a -10M
-                }
+                Arrays.fill(_1D, UNASSIGNED);
             }
         }
     }
@@ -40,17 +36,25 @@ class Solution {
                 dfs(1, this.numPiles-1, ALICE), // choose 'f'
                 dfs(0, this.numPiles-2, ALICE)  // choose 'l'
         );
-        return (aliceMaxPoints >= 0);
+        
+        int sum = 0;
+        for(int x: piles){sum += x;}
+        // System.out.println(aliceMaxPoints);
+        
+        return (aliceMaxPoints > sum/2);
     }
     
     
     private int dfs(int first, int last, int playerType){
+        // System.out.println("cALLING first = " + first + ", last = " + last + ", playerType = " + playerType);
+        
         // base cases
         if(first == last){
+            // System.out.println("RETURN ... first=last, first="+first);
             return this.piles[first];
         }
         if(first > last){ // should not reache
-            return NULL_VALUE;
+            return 0;
         }
         
         // check map
@@ -61,8 +65,11 @@ class Solution {
         // recursion
         int ans = -1;
         int newPlayer = getNewPlayer(playerType);
-        int takeFirst = dfs(first+1, last, newPlayer);
-        int takeLast = dfs(first, last-1, newPlayer);
+        int takeFirst = dfs(first+1, last, newPlayer) 
+                            + this.piles[first];
+        int takeLast = dfs(first, last-1, newPlayer)
+                            + this.piles[last];
+        
         if(playerType == ALICE){
             // minimize
             ans = Math.min(takeFirst, takeLast);
@@ -75,6 +82,8 @@ class Solution {
         
         // put into map
         this.dp[first][last][playerType] = ans;
+        
+        // System.out.println("for first = " + first + ", last = " + last + ", ans = " + ans);
         
         // return the ans.
         return ans;
