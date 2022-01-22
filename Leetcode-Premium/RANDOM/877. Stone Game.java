@@ -8,18 +8,23 @@ class Solution {
     
     private int[] piles;
     
-    private int[][][] dp;
+    // private int[][][] dp;
+    private int[][] dp;
     
     private int getNewPlayer(int player){
         return (player == ALICE) ? BOB: ALICE;
     }
     
     private void initializeDP(){
-        this.dp = new int[this.numPiles][this.numPiles][2];
-        for(int[][] _2D: dp){
-            for(int[] _1D: _2D){
-                Arrays.fill(_1D, UNASSIGNED);
-            }
+        // this.dp = new int[this.numPiles][this.numPiles][2];
+        // for(int[][] _2D: dp){
+        //     for(int[] _1D: _2D){
+        //         Arrays.fill(_1D, UNASSIGNED);
+        //     }
+        // }
+        this.dp = new int[this.numPiles][this.numPiles];
+        for(int[] arr: dp){
+            Arrays.fill(arr, UNASSIGNED);
         }
     }
     
@@ -30,11 +35,11 @@ class Solution {
         int startPlayer = ALICE;
         this.piles = piles;
         
-        this.initializeDP();
+        this.initializeDP(); // initialize the DP cache
     
         int aliceMaxPoints = Math.max(
-                dfs(1, this.numPiles-1, ALICE), // choose 'f'
-                dfs(0, this.numPiles-2, ALICE)  // choose 'l'
+                dfs(1, this.numPiles-1), // choose 'f'
+                dfs(0, this.numPiles-2)  // choose 'l'
         );
         
         int sum = 0;
@@ -45,9 +50,11 @@ class Solution {
     }
     
     
-    private int dfs(int first, int last, int playerType){
-        // System.out.println("cALLING first = " + first + ", last = " + last + ", playerType = " + playerType);
+    private int dfs(int first, int last){
+        int lenArr = last - first;
+        int playerType = (lenArr%2 == 0) ? ALICE: BOB;
         
+        // System.out.println("cALLING first = " + first + ", last = " + last + ", playerType = " + playerType);
         // base cases
         if(first == last){
             // System.out.println("RETURN ... first=last, first="+first);
@@ -58,17 +65,14 @@ class Solution {
         }
         
         // check map
-        if(this.dp[first][last][playerType] != UNASSIGNED)
-            return this.dp[first][last][playerType];
+        if(this.dp[first][last] != UNASSIGNED)
+            return this.dp[first][last];
         
         
         // recursion
         int ans = -1;
-        int newPlayer = getNewPlayer(playerType);
-        int takeFirst = dfs(first+1, last, newPlayer) 
-                            + this.piles[first];
-        int takeLast = dfs(first, last-1, newPlayer)
-                            + this.piles[last];
+        int takeFirst = dfs(first+1, last) + this.piles[first];
+        int takeLast = dfs(first, last-1) + this.piles[last];
         
         if(playerType == ALICE){
             // minimize
@@ -81,7 +85,7 @@ class Solution {
 
         
         // put into map
-        this.dp[first][last][playerType] = ans;
+        this.dp[first][last] = ans;
         
         // System.out.println("for first = " + first + ", last = " + last + ", ans = " + ans);
         
