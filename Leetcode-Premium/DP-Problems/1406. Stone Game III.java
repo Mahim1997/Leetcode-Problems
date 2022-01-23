@@ -10,14 +10,41 @@ class Solution {
     
     public String stoneGameIII(int[] values) {
         this.values = values;
-        this.cache = new HashMap<>();
+//         this.cache = new HashMap<>();
         
-        // int sum = 0;
-        // for(int v: values){sum += v;}
-        int diffAliceBob = dfs(0);
-        System.out.println("diffAliceBob = " + diffAliceBob);
-        return (diffAliceBob == 0) ? "Tie": 
-                ((diffAliceBob >= 0) ? "Alice": "Bob");
+//         // int sum = 0;
+//         // for(int v: values){sum += v;}
+//         int diffAliceBob = dfs(0);
+//         System.out.println("diffAliceBob = " + diffAliceBob);
+        // return (diffAliceBob == 0) ? "Tie": 
+        //         ((diffAliceBob >= 0) ? "Alice": "Bob");
+        return bottomUP();
+    }
+    
+    private String bottomUP(){
+        int n = this.values.length;
+        int[] dp = new int[n + 1];
+        dp[n] = 0; // base case
+        for(int i=n-1; i>=0; i--){
+            int ans = Integer.MIN_VALUE;
+            int sumSoFar = 0;
+            for(int stones=0; stones<3; stones++){
+                if((i + stones) < n){
+                    sumSoFar += this.values[i + stones];
+                    int current = sumSoFar - dp[i + stones + 1];
+                    ans = Math.max(ans, current);   
+                }
+                dp[i] = ans;
+            }            
+        }
+        int val = dp[0];
+        if(val == 0){
+            return "Tie";
+        }else if(val > 0){
+            return "Alice";
+        }else{
+            return "Bob";
+        }
     }
     
     private int dfs(int idx){
