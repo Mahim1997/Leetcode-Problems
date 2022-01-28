@@ -46,9 +46,120 @@ class Solution {
             return false;
         }
         
+        // return bottomUP();
+        return bottomUPSpaceOptimized();
         
+        // return (dfs(0, 0) == TRUE) ? true : false; // prefix-wise OR suffix-wise ??
+    }
+    
+    private boolean bottomUPSpaceOptimized(){
+        int lastRow = this.len1;
+        int lastCol = this.len2;
         
-        return (dfs(0, 0) == TRUE) ? true : false; // prefix-wise OR suffix-wise ??
+        boolean[] currentArr = new boolean[this.len2 + 1];
+        boolean[] nextArr = new boolean[this.len2 + 1];
+        
+        nextArr[lastCol] = true;
+        for(int col=lastCol-1; col>=0; col--){
+            int idxDest = col + lastRow;
+            if(this.s2.charAt(col) == this.dest.charAt(idxDest)){
+                // dp[lastRow][col] = dp[lastRow][col+1];
+                nextArr[col] = nextArr[col + 1];
+            }else{
+                // dp[lastRow][col] = false;
+                nextArr[col] = false;
+            }
+        }
+        
+        for(int row=lastRow-1; row>=0; row--){
+            // set the last column of currentArr
+            int idxDest = lastCol + row;
+            if(this.s1.charAt(row) == this.dest.charAt(idxDest)){
+                currentArr[lastCol] = nextArr[lastCol];
+            }else{
+                currentArr[lastCol] = false;
+            }
+            
+            // iterate over all columns
+            for(int col=lastCol-1; col>=0; col--){
+
+                boolean ansIdx1 = false;
+                boolean ansIdx2 = false;
+                
+                idxDest = row + col;
+                if(this.s1.charAt(row) == this.dest.charAt(idxDest)){
+                    // ansIdx1 = dp[row+1][col];
+                    ansIdx1 = nextArr[col];
+                }
+                if(this.s2.charAt(col) == this.dest.charAt(idxDest)){
+                    // ansIdx2 = dp[row][col+1];
+                    ansIdx2 = currentArr[col+1];
+                }
+                
+                boolean ans = ansIdx1 | ansIdx2;
+                // dp[row][col] = ans;
+                currentArr[col] = ans;
+                
+            }
+            
+            // interchange arrays
+            for(int col=lastCol-1; col>=0; col--){
+                nextArr[col] = currentArr[col];
+            }
+        }
+        
+        return currentArr[0];
+    }
+    
+    
+    private boolean bottomUP(){
+        boolean[][] dp = new boolean[this.len1+1][this.len2+1];
+    
+        // row -> s1, col -> s2
+        int lastRow = this.len1;
+        int lastCol = this.len2;
+
+        // Base cases.
+        dp[lastRow][lastCol] = true;
+    
+        for(int row=lastRow-1; row>=0; row--){
+            int idxDest = row + lastCol;
+            if(this.s1.charAt(row) == this.dest.charAt(idxDest)){
+                dp[row][lastCol] = dp[row+1][lastCol];
+            }else{
+                dp[row][lastCol] = false;
+            }
+        }
+        
+        for(int col=lastCol-1; col>=0; col--){
+            int idxDest = col + lastRow;
+            if(this.s2.charAt(col) == this.dest.charAt(idxDest)){
+                dp[lastRow][col] = dp[lastRow][col+1];
+            }else{
+                dp[lastRow][col] = false;
+            }
+        }
+    
+        // iteration.
+        for(int row=lastRow-1; row>=0; row--){
+            for(int col=lastCol-1; col>=0; col--){
+                boolean ansIdx1 = false;
+                boolean ansIdx2 = false;
+                
+                int idxDest = row + col;
+                if(this.s1.charAt(row) == this.dest.charAt(idxDest)){
+                    ansIdx1 = dp[row+1][col];
+                }
+                if(this.s2.charAt(col) == this.dest.charAt(idxDest)){
+                    ansIdx2 = dp[row][col+1];
+                }
+                
+                boolean ans = ansIdx1 | ansIdx2;
+                dp[row][col] = ans;
+            }
+        }
+        
+        return dp[0][0];
     }
 
     private int dfs(int idx1, int idx2){
