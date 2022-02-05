@@ -7,12 +7,13 @@ class Solution {
         
         // src = 0
         int src = 0;
+        int dest = graph.length - 1;
         List<Integer> pathSoFar = new ArrayList<>(); 
         
         // Since it is a directed acyclic graph, no need to use 'visited' set
         
-        // pathSoFar.add(src);
-        dfs(graph, answer, pathSoFar, src);
+        pathSoFar.add(src);
+        dfs(graph, answer, pathSoFar, src, dest);
         
         
         
@@ -23,27 +24,27 @@ class Solution {
     private void dfs(int[][] graph, 
                         List<List<Integer>> answer, 
                         List<Integer> pathSoFar, 
-                        int src){
+                        int src,
+                        int dest){
 
-        // set
-        pathSoFar.add(src);
-        
         // check here for dest node        
         // base case
-        int dest = graph.length - 1; // n - 1
         if(src == dest){
             answer.add(new ArrayList<>(pathSoFar));
-            // can't return without removing pathSoFar's last node
-        }
-        else{
-            // recurse, for each child node
-            for(int child: graph[src]){
-                dfs(graph, answer, new ArrayList<>(pathSoFar), child);
-            }            
+            return;
         }
         
-        // reset
-        // pathSoFar.remove(pathSoFar.size() - 1);
+        for(int child: graph[src]){
+            
+            // set
+            pathSoFar.add(child);
+            
+            // recurse
+            dfs(graph, answer, pathSoFar, child, dest);
+            
+            // reset
+            pathSoFar.remove(pathSoFar.size() - 1);
+        }
         
     }
 }
