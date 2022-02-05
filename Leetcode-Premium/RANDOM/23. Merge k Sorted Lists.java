@@ -10,11 +10,11 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        // return usingPriorityQueue(lists);
-        if(lists.length == 0)
-            return null;
+        return usingPriorityQueue(lists);
+//         if(lists.length == 0)
+//             return null;
         
-        return divideAndConquer(lists, 0, lists.length - 1);
+//         return divideAndConquer(lists, 0, lists.length - 1);
     }
     
     private ListNode mergeTwo(ListNode node1, ListNode node2){
