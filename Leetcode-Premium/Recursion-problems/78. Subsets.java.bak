@@ -1,39 +1,3 @@
-/*
-class Solution {
-    public List<List<Integer>> subsets(int[] numsArr) {
-        List<List<Integer>> ans = new ArrayList<>();
-        
-        ans.add(new ArrayList<>()); // initially add the empty list
-        addSubsets(ans, numsArr, 0);
-        
-        return ans;
-    }
-    
-    private void addSubsets(List<List<Integer>> ans,
-                           int[] nums,
-                           int idx){
-        // base case
-        if(idx == nums.length)
-            return;
-        
-        // System.out.println("OUTSIDE, idx = " + idx + ", 2D list = " + ans);
-        // for each singleList in ans, keep it AND copy nums[idx]
-        
-        List<List<Integer>> newAns = new ArrayList<>(ans);
-        for(List<Integer> list: newAns){
-            List<Integer> singleList = new ArrayList<>(list);
-            singleList.add(nums[idx]);
-            ans.add(singleList);
-        }
-        
-        addSubsets(ans, nums, idx+1);
-        
-    }
-    
-    
-}
-*/
-
 class Solution {
     public List<List<Integer>> subsets(int[] numsArr) {
         Set<List<Integer>> ans = new HashSet<>();
