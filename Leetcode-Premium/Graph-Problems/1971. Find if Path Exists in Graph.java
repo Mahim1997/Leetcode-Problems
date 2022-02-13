@@ -1,3 +1,71 @@
+/*
+1971. Find if Path Exists in Graph
+class Solution {
+    public boolean validPath(int n, int[][] edges, 
+                             int source, int destination) {
+        
+        // using BFS style
+        // edges[i] = [u_i, v_i]
+        
+        
+        // build adjacent list
+        List<List<Integer>> adjList = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            adjList.add(new ArrayList<>());
+        }
+        for(int[] edge: edges){
+            int u = edge[0];
+            int v = edge[1];
+            
+            adjList.get(u).add(v);
+            adjList.get(v).add(u);
+        }
+        
+        // System.out.println("Printing adjList: " + adjList);
+        
+        // edge cases
+        if(n == 1)
+            return (source == destination);
+        
+        if(edges.length == 0)
+            return false;
+        
+        
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        
+        queue.add(source);
+        
+        // DONOT add to visited right here, as inside while loop, this will be affected
+        ////// visited.add(source);
+        
+        while(!queue.isEmpty()){
+            int v = queue.remove();
+            // System.out.println("From queue, v = " + v);
+            
+            if(v == destination)
+                return true;
+            
+            if(visited.contains(v))
+                continue;
+            visited.add(v);
+            
+            for(int child: adjList.get(v)){
+                // System.out.println("child = " + child);
+                queue.add(child);
+            }
+        }
+        
+        
+        return false;
+    }
+}
+
+
+
+*/
+
+
 class Graph{
     int numVertices;
     List<List<Integer>> adjList;
