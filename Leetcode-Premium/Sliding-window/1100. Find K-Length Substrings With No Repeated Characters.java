@@ -6,6 +6,7 @@ class Solution {
         return (c - 'a');
     }
     
+	// O(26)
     private boolean hasValidity(){
         for(int x: this.freq){
             if(x > 1)
@@ -17,18 +18,12 @@ class Solution {
     private void increment(char c){
         // check if freq['c'] > 1 ---> false
         int idx = this.getIdx(c);
-        this.freq[idx]++;
-        
-        if(this.freq[idx] > 1)
-            this.isValid = false;
+        this.freq[idx]++;        
     }
     
     private void decrement(char c){
         int idx = this.getIdx(c);
         this.freq[idx]--;
-        
-        if(this.freq[idx] <= 1)
-            this.isValid = true;
     }
     
     public int numKLenSubstrNoRepeats(String s, int k) {
