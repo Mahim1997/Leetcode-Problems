@@ -28,14 +28,14 @@ class DisjointSet{
         
         if(this.ranks[rootX] > this.ranks[rootY]){
             // assign to rootX
-            this.roots[rootY] = this.roots[rootX];
+            this.roots[rootY] = rootX;
         }
         else if(this.ranks[rootX] < this.ranks[rootY]){
-            this.roots[rootX] = this.roots[rootY];
+            this.roots[rootX] = rootY;
         }
         else{
-            this.roots[rootY] = this.roots[rootX];
-            this.ranks[rootY]++;
+            this.roots[rootY] = rootX;
+            this.ranks[rootX]++; // which one is assigned, increase its rank
         }
     }
     
