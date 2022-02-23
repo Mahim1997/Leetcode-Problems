@@ -19,56 +19,33 @@ class Node {
 */
 
 class Solution {
-    private Map<Node, Node> mapOldToNew;
     
-    public Node cloneGraph(Node root) {
-        if(root == null){
-            return root;
-        }
-        this.mapOldToNew = new HashMap<>();
-        
-        return dfs(root);
+    // TO DO
+    public Node cloneGraph(Node node) {
+        Map<Node, Node> mapOldToNew = new HashMap<>();
+        return dfs(node, mapOldToNew);
     }
+    
+    private Node dfs(Node node, Map<Node, Node> map){
+        // base cases
+        if(map.containsKey(node) == true)
+            return map.get(node);
 
-    private Node dfs(Node root){
-        // check map
-        if(this.mapOldToNew.containsKey(root)){
-            return this.mapOldToNew.get(root);
-        }
+        if(node == null)
+            return node;
         
         // create new node
-        Node copyNode = new Node(root.val);
-        // put into map [done before recursive call]
-        this.mapOldToNew.put(root, copyNode);
+        Node newNode = new Node(node.val);
         
-        // for each child
-        for(Node neighbor: root.neighbors){
-            // recursive call to dfs
-            copyNode.neighbors.add(dfs(neighbor));
+        // put into map here
+        map.put(node, newNode);
+        
+        // run for each children
+        for(Node child: node.neighbors){
+            newNode.neighbors.add(dfs(child, map));
         }
         
-        return copyNode;
+        return newNode;
     }
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
