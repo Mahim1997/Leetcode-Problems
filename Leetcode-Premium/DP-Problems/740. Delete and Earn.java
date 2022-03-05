@@ -1,135 +1,124 @@
 class Solution {
-    
-    List<Integer> listNumbers;
-    int numItems;
-    private int[] nums;
-    
-    Map<Integer, Integer> map; // cache
-    Map<Integer, Integer> counts;
-    
     public int deleteAndEarn(int[] nums) {
-        initialize(nums);
-        
-        
-        // return topDown(nums);
-        return bottomUp();
+        // return bottomUp(nums);
+        return bottomUpOptimizedSpace(nums);
     }
     
-    void printArr(int[] arr){
-        for(int x: arr){System.out.print(x + " ");}
-        System.out.println("");
-    }
-    
-    private int bottomUp(){
-        System.out.println(this.listNumbers);
-        
-        // initialize(nums); // initialize ...
-        
-        int[] dp = new int[this.numItems];
-        dp[0] = getCost(0);
-        
-        if(this.numItems == 1)
-            return dp[0];
-        
-        for(int i=1; i<this.numItems; i++){
-            int prevIdx = i - 1;
-            if((i >= 1) && 
-               (this.listNumbers.get(i) 
-                == (this.listNumbers.get(i - 1) + 1))){
-                // can't take one next idx
-                prevIdx = i - 2;
-            }
-            int prevMaxProfit;
-            if(prevIdx < 0){
-                prevMaxProfit = 0;
-            }else{
-                prevMaxProfit = dp[prevIdx];
-            }
-            int toTake = getCost(i) + prevMaxProfit;
-            int notTake = 0 + dp[i - 1];
-            dp[i] = Math.max(toTake, notTake);
-        
-            // printArr(dp); // DEBUGGING
-        }
-        
-        return dp[this.numItems - 1];
-    }
-    
-    private void initialize(int[] nums){
-        this.nums = nums;
-        Arrays.sort(this.nums); // sort the numbers
-        
-        // maintain counts
-        this.counts = new HashMap<>();
-        this.listNumbers = new ArrayList<>();
-    
-        // hash map does not maintain order of keys
+    private Map<Integer, Integer> getCounts(int[] nums){
+        Map<Integer, Integer> counter = new HashMap<>();
         for(int num: nums){
-            if(this.counts.containsKey(num) == false){
-                this.listNumbers.add(num);
-            }
-            this.counts.put(num, 
-                            this.counts.getOrDefault(num, 0) + 1);
+            counter.put(num, counter.getOrDefault(num, 0) + 1);
         }
-    
-        this.numItems = this.listNumbers.size();
+        return counter;
     }
     
-    private int topDown(int[] nums){
-        initialize(nums);
+    private List<Integer> getSortedKeys(Map<Integer, Integer> counter){
+        List<Integer> keys = new ArrayList<>(); // counter.keySet();
         
-        this.map = new HashMap<>();
+        // sort  to maintain ordering.
+        for(int key: counter.keySet()){keys.add(key);}
+        keys.sort((x1, x2) -> (x1 - x2)); // ascending order sorting
+        return keys;
+    }
+    
+    private int bottomUpOptimizedSpace(int[] nums){
+        Map<Integer, Integer> counter = getCounts(nums);
+        List<Integer> keys = getSortedKeys(counter);
         
-        // Just like, House Robber problem.
-        return dfs(this.numItems - 1);
+        int lenUnique = keys.size();
+        
+        // edge cases: of 0 len, 1 len
+        
+        // dp[0]
+        int twoBefore = keys.get(0) * counter.get(keys.get(0));
+        
+        // EDGE CASE: size == 1
+        if(lenUnique == 1){
+            return twoBefore;
+        }
+        
+        // dp[1] = take both || MAX(THIS, dp[0])
+        int oneBefore = 0;
+        
+        if((keys.get(1) - 1) != keys.get(0)){
+            // dp[1] = dp[0] + THIS
+            oneBefore = keys.get(1) * counter.get(keys.get(1)) + twoBefore;
+        }else{
+            // dp[1] = MAX(dp[0], THIS)
+            oneBefore = Math.max(
+                twoBefore,
+                keys.get(1) * counter.get(keys.get(1))
+            );
+        }
+        
+        // EDGE CASE: size == 2
+        if(lenUnique == 2){
+            return oneBefore;
+        }
+        
+        int currentAnswer = 0;
+        // recursive case
+        for(int i=2; i<lenUnique; i++){
+            if((keys.get(i) - 1) != keys.get(i - 1)){
+                // can take both
+                currentAnswer = oneBefore + 
+                                keys.get(i) * counter.get(keys.get(i));
+            }
+            else{
+                // can't take --> take max
+                // dp[i] = MAX(dp[i-1] + 0, dp[i-2] + COUNT(i))
+                currentAnswer = Math.max(
+                    oneBefore + 0,
+                    twoBefore + keys.get(i) * counter.get(keys.get(i))
+                );
+            }
+            
+            // update values
+            twoBefore = oneBefore;
+            oneBefore = currentAnswer;
+        }
+        
+        return currentAnswer;
     }
     
-    private int getCost(int idx){
-        int num = this.listNumbers.get(idx); 
-        return num * this.counts.get(num);
-    }
-    
-    // dp(i) = MAX[dp(i - 1) + 0, dp(i - 2) + cost[i]]
-    private int dfs(int idx){
-        // System.out.println("Calling for idx = " + idx);
+    private int bottomUp(int[] nums){
+        Map<Integer, Integer> counter = getCounts(nums);
+        List<Integer> keys = getSortedKeys(counter);
+        // house robber technique
+        int lenUnique = keys.size();
+        
+        // dp array: ends at idx 'i'
+        int[] dp = new int[lenUnique];
         
         // base case
-        if(idx == 0){
-            return getCost(idx); 
-        }
-        if(idx < 0)
-            return 0;
+        int zeroElement = keys.get(0);
+        dp[0] = zeroElement * counter.get(zeroElement);
         
-        // check map
-        if(this.map.containsKey(idx)){
-            return this.map.get(idx);
-        }
-        
-        int ans;
-        // take IT
-        int prevIdx = idx - 1;
-        if(idx > 0){
-            // CANNOT take previous index
-            boolean prevWasOneLess = listNumbers.get(idx) 
-                            == (listNumbers.get(idx - 1) + 1);
-            // curr == prev + 1
-            if(prevWasOneLess)
-            {
-                prevIdx = idx - 2;
+        // recursive case
+        for(int i=1; i<lenUnique; i++){
+            int currElement = keys.get(i), prevElement = keys.get(i - 1);
+            
+            int currPoints = currElement*counter.get(currElement);
+            
+            if((currElement - 1) != prevElement){
+                // check if can take both
+                dp[i] = dp[i - 1] + currPoints;
+                
             }
+            else{
+                // else, take max (EXTRA checking for i'th index?)
+                if(i == 1){
+                    dp[i] = Math.max(currPoints, dp[i - 1]);
+                    continue;
+                }
+                dp[i] = Math.max(
+                    dp[i - 1] + 0,          // can't take current points
+                    dp[i - 2] + currPoints  // can take current with keys[i - 2]
+                );
+            }
+            
         }
-        int costTake = dfs(prevIdx) + getCost(idx);
         
-        // don't take IT
-        int costNotTake = dfs(idx - 1) + 0; // not take
-        
-        
-        ans = Math.max(costTake, costNotTake);
-        
-        // System.out.println(">> For idx = " + idx + ", ans = " + ans);
-        // insert into map
-        this.map.put(idx, ans);
-        return ans;
+        return dp[lenUnique - 1];
     }
-    
 }
