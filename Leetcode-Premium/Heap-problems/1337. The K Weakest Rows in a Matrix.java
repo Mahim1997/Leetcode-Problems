@@ -1,55 +1,104 @@
-class MyComparator implements Comparator<int[]>{
-    @Override
-    public int compare(int[] arr1, int[] arr2){
-        // 0: idx, 1: count
-        if(arr1[1] < arr2[1]){
-            return -1;
-        }
-        else if(arr1[1] > arr2[1]){
-            return 1;
-        }
+class MyRow {
+    public int index;
+    public int numSoldiers;
+    
+    // Get the rightmost index of '1'
+    private int binarySearch(int[] nums, int target){
+        int low = 0, high = nums.length - 1, ans = -1;
         
-        // counts same, only compare indices
-        return (arr1[0] < arr2[0]) ? -1: 1;
+        // edge case
+        if(nums[high] == target)
+            return high;
+        
+        while(low <= high){
+            int mid = low + (high - low)/2;
+            if(nums[mid] == 1){
+                // move to the right
+                ans = mid;
+                low = mid + 1;
+            }
+            else if(nums[mid] == 0){
+                high = mid - 1;
+            }
+        }
+        return ans;
+    }
+    
+    public MyRow(int idx, int[] row){
+        int idxLastOne = binarySearch(row, 1);
+        this.numSoldiers = 1 + idxLastOne;
+        
+        this.index = idx;
+    }
+    
+    @Override
+    public String toString(){
+        // return "index = " + index + ", numSoldiers = " + numSoldiers;
+        return "(" + index + "," + numSoldiers + ")";
+    }
+}
+
+class MyRowComparator implements Comparator<MyRow> {
+    
+    @Override
+    public int compare(MyRow o1, MyRow o2){
+        // Reverse comparison for reverse priority queue
+        return -minimumComparison(o1, o2);
+    }
+    
+    private int minimumComparison(MyRow o1, MyRow o2){
+        // 1 means swap, -1/0 means correct position
+        
+        // correct positions
+        if(o1.numSoldiers < o2.numSoldiers) // has smaller num of soldiers
+            return -1;
+        if((o1.numSoldiers == o2.numSoldiers) && (o1.index < o2.index))
+            return -1;
+        
+        // o1 is STRONGER than o2, hence swap
+        return 1;
     }
 }
 
 class Solution {
     public int[] kWeakestRows(int[][] mat, int k) {
-        int nRows = mat.length, nCols = mat[0].length;
-        int[] rowSoldierCount = new int[nRows];
+        MyRowComparator comparator = new MyRowComparator();
+        PriorityQueue<MyRow> pq = new PriorityQueue<>(comparator);
         
-        // arr[0] -> index, arr[1] -> count
-        PriorityQueue<int[]> pq;
-        pq = new PriorityQueue<>(new MyComparator());
-        
-        for(int r=0; r<nRows; r++){
-            int countForThisRow = getCountRow(mat, r);
-            int[] arr = {r, countForThisRow};
-            pq.add(arr);
-            // rowSoldierCount[r] = getCountRow(mat, r);
+        int n = mat.length;
+        for(int i=0; i<n; i++){
+            MyRow newRow = new MyRow(i, mat[i]);
+            // pq.add(newRow);
+            
+            // check for 'k' length
+            if(pq.size() < k){
+                pq.add(newRow);
+            }
+            else{
+                MyRow topRow = pq.peek();
+                
+                // if need to swap i.e. BIGGER value is found, then ignore
+                if(comparator.compare(topRow, newRow) == 1){
+                    continue;
+                }
+                else{ // else, remove & add
+                    pq.remove();
+                    pq.add(newRow);
+                }
+            }
+            
+            // System.out.println("After i = " + i + ", pq => " + pq);
         }
         
-        // System.out.println("Printing pq: " + pq);
-        
-        int idx = 0;
+        // fill up answer
         int[] ans = new int[k];
-        while(!pq.isEmpty()){
-            if(idx < k)
-                ans[idx++] = pq.remove()[0];
-            else
-                break;
+        int idx = k-1;
+        while(idx >= 0){
+            ans[idx--] = pq.remove().index;
         }
         
         return ans;
     }
-    
-    private int getCountRow(int[][] mat, int row){
-        int nCols = mat[0].length;
-        int sum = 0;
-        for(int c=0; c<nCols; c++){
-            sum += mat[row][c];
-        }
-        return sum;
-    }
 }
+                                                      
+                                                      
