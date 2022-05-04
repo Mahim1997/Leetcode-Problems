@@ -10,74 +10,49 @@ public class Solution {
         Scanner sc = new Scanner(System.in);
 
         // read inputs
-//        int T = sc.nextInt();
-        int T = Integer.parseInt(sc.nextLine().trim());
-        int t = 1;
-//        while(sc.hasNextLine()){
-        for (t = 1; t <= T; t++) {
-            String s = sc.nextLine();
-//            System.out.println("<INPUT>: s = <" + s + ">");
-            String ans = getAnswer(s);
+        int T = sc.nextInt();
+//        int T = Integer.parseInt(sc.nextLine().trim());
+//        int t = 1;
+
+        for (int t = 1; t <= T; t++) {
+            int n = sc.nextInt();
+            int[] deliciousness = new int[n];
+            for (int i = 0; i < n; i++) {
+                deliciousness[i] = sc.nextInt();
+            }
+
+            int ans = computeMaximumPayingCustomers(deliciousness);
             System.out.println("Case #" + t + ": " + ans);
-
-            if (t == T) {
-                break;
-            }
-//            t++;
         }
     }
 
-    private static int numUniqueCharacters(String s) {
-        Set<Character> set = new HashSet<>();
-        for (char c : s.toCharArray()) {
-            set.add(c);
-        }
+    private static int computeMaximumPayingCustomers(int[] deliciousness) {
+        int n = deliciousness.length;
+        int numPeople = 0;
 
-        // Also handles 1 length
-        return set.size();
-    }
+        int low = 0, high = n - 1;
+        int maxSoFar = Integer.MIN_VALUE;
 
-    private static String getAnswer(String s) {
-        // check all same chars
-        if (numUniqueCharacters(s) == 1) {
-            return s;
-        }
+        while (low <= high) {
+            int lowElement = deliciousness[low], highElement = deliciousness[high];
+            int minElement;
 
-        // normal logic
-        int len = s.length();
-
-        StringBuilder bld = new StringBuilder();
-        for (int i = 0; i < len; i++) {
-            // check for substring [i, len), whether same chars
-            String substr = s.substring(i, len);
-            if (numUniqueCharacters(substr) == 1) {
-                bld.append(substr);
-                return bld.toString();
-            }
-
-            char c = s.charAt(i);
-            // last char, only once
-            if (i == (len - 1)) {
-                bld.append(c);
-                break;
-            }
-
-            char nextChar = s.charAt(i + 1);
-            int j = i + 1;
-            while(nextChar == c){
-                j++;
-                nextChar = s.charAt(j);
-            }
-            
-            if (c > nextChar) {
-                // just once
-                bld.append(c);
+            if (lowElement < highElement) {
+                // increment low
+                minElement = lowElement;
+                low++;
             } else {
-                // twice
-                bld.append(c).append(c);
+                // decrement high
+                minElement = highElement;
+                high--;
+            }
+
+            if (minElement >= maxSoFar) {
+                maxSoFar = minElement;
+                numPeople++;
             }
         }
 
-        return bld.toString();
+        return numPeople;
     }
 }
