@@ -1,71 +1,128 @@
 class Solution {
-    private boolean[][] visited;
-    int[] dx = {-1, 0,  0, 1};
-    int[] dy = { 0, -1, 1, 0};
+    private static int[][] movements = {
+        {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+    };
     
+    private static int LAND = 1;
+    
+    // API call
     public int maxAreaOfIsland(int[][] grid) {
-        // check if all zeros.
-        int nRows = grid.length;
-        int nCols = grid[0].length;
+        // standard bfs
+        int ROWS = grid.length;
+        int COLS = grid[0].length;
+        boolean[][] visited = new boolean[ROWS][COLS];
         
-        this.visited = new boolean[nRows][nCols];
-        
-        int maxArea = 0, currentArea = 0;
-        
-        for(int i=0; i<nRows; i++){
-            for(int j=0; j<nCols; j++){
-                if(grid[i][j] == 1){
-                    if(this.visited[i][j] == false){
-                        // this.visited[i][j] = true;
-                        currentArea = bfs(grid, i, j, nRows, nCols);
-                    }
+        int maxArea = 0;
+        for(int r=0; r<ROWS; r++) {
+            for(int c=0; c<COLS; c++) {
+                if(!visited[r][c] && (grid[r][c] == LAND)) {
+                    int currentArea = dfs(
+                        grid, visited, r, c
+                    );
                     maxArea = Math.max(maxArea, currentArea);
                 }
             }
         }
         
-
         return maxArea;
     }
-
-    private boolean isWithin(int x, int y, int nRows, int nCols){
-        return ((x >= 0) && (x < nRows) && (y >= 0) && (y < nCols));
+    
+    private boolean isWithin(int r, int c, int[][] grid) {
+        return (
+            (r >= 0) && (c >= 0) &&
+            (r < grid.length) && (c < grid[0].length)
+        );
     }
     
-    private int bfs(int[][] grid, int sourceX, int sourceY, int nRows, int nCols){
-        Queue<int[]> queue = new LinkedList<>();
+    private int dfs(
+        int[][] grid, 
+        boolean[][] visited, 
+        int rowStart, 
+        int colStart
+    ) {
+        int connectedComponents = 0;
         
-        // System.out.println("Calling for sourceX = " + sourceX + ", sourceY = " + sourceY);
+        Stack<int[]> stack = new Stack<>();
+        stack.add(new int[]{rowStart, colStart});
+        visited[rowStart][colStart] = true;
         
-        int cnt = 0;
-        queue.add(new int[]{sourceX, sourceY});
-        while(queue.isEmpty() == false){
-            int[] node = queue.remove();
-            int x = node[0];
-            int y = node[1];
+        while(!stack.isEmpty()) {
+            int[] top = stack.pop();
+            int row = top[0], col = top[1];
             
-            // System.out.println("From queue, x = " + x + ", y = " + y);
-            // if(isWithin(x, y, nRows, nCols) == false)
-            //     continue;
+            // increment connected land
+            connectedComponents++;
             
-            if(this.visited[x][y] == true)
-                continue;
-            
-            this.visited[x][y] = true;
-            cnt++;
-            
-            // movements.
-            for(int i=0; i<dx.length; i++){
-                int newX = x + dx[i];
-                int newY = y + dy[i];
-                if(isWithin(newX, newY, nRows, nCols) == true){
-                    if(grid[newX][newY] == 1) // should be a '1'
-                        queue.add(new int[]{newX, newY});
-                }
+            // add children
+            for(int[] dir: movements) {
+                int rowNew = row + dir[0];
+                int colNew = col + dir[1];
+                
+                // ignore if out of bounds
+                if(!isWithin(rowNew, colNew, grid))
+                    continue;
+                
+                // ignore if already visited
+                if(visited[rowNew][colNew] == true)
+                    continue;
+                
+                // ignore if NOT land
+                if(grid[rowNew][colNew] != LAND)
+                    continue;
+                
+                // 'visit' the children
+                stack.add(new int[]{rowNew, colNew});
+                visited[rowNew][colNew] = true;
             }
         }
         
-        return cnt;
+        return connectedComponents;
     }
     
+    
+    
+    private int bfs(
+        int[][] grid, 
+        boolean[][] visited, 
+        int rowStart, 
+        int colStart
+    ) {
+        int connectedComponents = 0;
+        
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{rowStart, colStart});
+        visited[rowStart][colStart] = true;
+        
+        while(!queue.isEmpty()) {
+            int[] top = queue.remove();
+            int row = top[0], col = top[1];
+            
+            // increment connected land
+            connectedComponents++;
+            
+            // add children
+            for(int[] dir: movements) {
+                int rowNew = row + dir[0];
+                int colNew = col + dir[1];
+                
+                // ignore if out of bounds
+                if(!isWithin(rowNew, colNew, grid))
+                    continue;
+                
+                // ignore if already visited
+                if(visited[rowNew][colNew] == true)
+                    continue;
+                
+                // ignore if NOT land
+                if(grid[rowNew][colNew] != LAND)
+                    continue;
+                
+                // 'visit' the children
+                queue.add(new int[]{rowNew, colNew});
+                visited[rowNew][colNew] = true;
+            }
+        }
+        
+        return connectedComponents;
+    }
 }
