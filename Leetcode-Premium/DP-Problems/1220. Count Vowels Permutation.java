@@ -1,51 +1,72 @@
 class Solution {
-    /*  a -> e
-        e -> a, i
-        i -> a,e,o,u
-        o -> i,u
-        u -> a
-    */
+    // 0: 'a', 1: 'e', 2: 'i', 3: 'o', 4: 'u'
+
+    private static int MOD = 1_000_000_000 + 7;
     
-    /*
-        a: e,i,u
-        e: a,i
-        i: e,o
-        o: i
-        u: i,o
-    */
+    private int getSum(long[] arr) {
+        long sum = 0;
+        for(long x: arr) {
+            sum = sum + x;
+            sum = sum % MOD;
+        }
+        return (int) sum;
+    }
     
-    int MOD = 1000000000+7;
+    private long[] getBaseCounts() {
+        return new long[]{1, 1, 1, 1, 1};
+    }
     
-    public int countVowelPermutation(int n) {
-        if(n == 1)
-            return 5;
+    private Map<Integer, List<Integer>> getNextCountMapping() {
+        Map<Integer, List<Integer>> map = new HashMap<>();
         
-        long[] prevArr = new long[5];
-        Arrays.fill(prevArr, 1); // all 1's
-        
-        long[] currentArr = new long[5];
-        for(int itr=2; itr<=n; itr++){
-            currentArr[0] = (prevArr[1] + prevArr[2] + prevArr[4])%MOD;
-            currentArr[1] = (prevArr[0] + prevArr[2])%MOD;
-            currentArr[2] = (prevArr[1] + prevArr[3])%MOD;
-            currentArr[3] = (prevArr[2])%MOD;
-            currentArr[4] = (prevArr[2] + prevArr[3])%MOD;
+        /*  0   1   2   3   4
+            a   e   i   o   u
             
-            // replace prevArr <- currArr
-            for(int i=0; i<5; i++){
-                prevArr[i] = currentArr[i];
+            Reverse mapping i.e. "depends on"
+            {a: [e, i, u]}, {e: [a, i]}, {i: [e, o]}, 
+            {o: [i]}, {u: [i, o]}
+        */
+        
+        map.put(0, new ArrayList<>(List.of(1, 2, 4)));
+        map.put(1, new ArrayList<>(List.of(0, 2)));
+        map.put(2, new ArrayList<>(List.of(1, 3)));
+        map.put(3, new ArrayList<>(List.of(2)));
+        map.put(4, new ArrayList<>(List.of(2, 3)));
+            
+        return map;
+    }
+        
+    private long[] getNextCounts(
+        long[] currentCounts,
+        Map<Integer, List<Integer>> mapNextCounting
+    ) {
+        long[] nextCounts = new long[5];
+        Arrays.fill(nextCounts, 0);
+        
+        // Mapping conversion
+        for(int key: mapNextCounting.keySet()) {
+            for(int val: mapNextCounting.get(key)) {
+                nextCounts[val] += (long) currentCounts[key];
+                nextCounts[val] %= MOD;
             }
         }
         
-        // sum.
-        long sum = 0;
-        
-        for(long x: currentArr){
-            sum = (sum + x)%MOD;
+        return nextCounts;
+    }
+    
+    public int countVowelPermutation(int n) {
+        long[] counts = getBaseCounts();
+        if(n == 1) {
+            return getSum(counts);
         }
         
-        // sum = sum%MOD;
+        Map<Integer, List<Integer>> mapNextCounting;
+        mapNextCounting = getNextCountMapping();
+    
+        for(int i=1; i<n; i++) {
+            counts = getNextCounts(counts, mapNextCounting);
+        }
         
-        return (int) sum;
+        return getSum(counts);
     }
 }
