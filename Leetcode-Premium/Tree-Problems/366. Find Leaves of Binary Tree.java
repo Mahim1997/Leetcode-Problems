@@ -14,40 +14,46 @@
  * }
  */
 class Solution {
-    private int getHeight(
-        TreeNode root, 
-        List<List<Integer>> listAnswer
-    ) {
-        if(root == null)
-            return -1; // so 'leaves' have 0-level
-
-        int height = 1 + Math.max(
-            getHeight(root.left, listAnswer),
-            getHeight(root.right, listAnswer)
-        );            
-        
-        // check if this index is present in listAnswer
-        if(listAnswer.size() == height) {
-            listAnswer.add(new ArrayList<>());
-        }
-        listAnswer.get(height).add(root.val);
-        
-        return height;
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        List<List<Integer>> ansList = new ArrayList<>();
+        dfs(root, ansList);
+        return ansList;
     }
     
-    // API
-    public List<List<Integer>> findLeaves(TreeNode root) {
-        List<List<Integer>> listAnswer = new ArrayList<>();
-        Map<TreeNode, Integer> mapHeights = new HashMap<>();
+    private boolean isLeaf(TreeNode node) {
+        return ((node.left == null) && (node.right == null));
+    }
+    
+    private int dfs(
+        TreeNode node, 
+        List<List<Integer>> ansList
+    ) {
+        // Base case
+        if(node == null)
+            return -1;
         
-        int maxHeight = getHeight(root, listAnswer);
+        // Recursive
+        int level;
+        if(isLeaf(node)) {
+            level = 0;
+        }
+        else {
+            level = 1 + Math.max(
+                dfs(node.left, ansList),
+                dfs(node.right, ansList)
+            );
+        }
         
-        return listAnswer;
+        int ansListSize = ansList.size();
+        if(ansList.size() <= level) {
+            for(int i=ansListSize; i<=level; i++)
+                ansList.add(new ArrayList<>());
+        }
+        ansList.get(level).add(node.val);
+                
+        return level;
     }
 }
-
-
-
 
 
 
