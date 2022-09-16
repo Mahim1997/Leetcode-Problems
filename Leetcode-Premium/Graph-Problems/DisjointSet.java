@@ -13,10 +13,9 @@ class UnionFind {
     }
 
     public int find(int x) {
-        while (x != root[x]) {
-            x = root[x];
-        }
-        return x;
+        if(x == root[x])
+			return x
+		return root[x] = x
     }
 
     public void union(int x, int y) {
