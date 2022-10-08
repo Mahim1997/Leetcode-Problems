@@ -2,69 +2,59 @@ class Interval {
     int start;
     int end;
     
-    public Interval(int start, int end) {
-        this.start = start;
-        this.end = end;
+    public Interval(int s, int e) {
+        this.start = s;
+        this.end = e;
     }
     
-    @Override
-    public String toString() {
-        return "[" + this.start + "," + this.end + "]";
+    // Guaranteed for any interval, start < end
+    // Strictly `this` interval should END before other starts
+    private boolean isDisjointLeft(Interval other) {
+        return (other.start >= this.end);
     }
     
-    public static boolean areDisjoint(Interval o1, Interval o2) {
-        if(o1.start < o2.start) {
-            // should check if o2 starts AFTER o1 ends
-            return (o2.start >= o1.end);
-        }
-        else if(o2.start < o1.start) {
-            return (o1.start >= o2.end);
-        }
-        else { // can't start at the same time, conflict directly
-            return false;
-        }
-
+    public boolean isConflicting(Interval other) {
+        return !(
+            this.isDisjointLeft(other) || 
+            other.isDisjointLeft(this)
+        );
     }
 }
 
 class IntervalComparator implements Comparator<Interval> {
     @Override
     public int compare(Interval o1, Interval o2) {
-        if(o1.start != o2.start) 
-            return (o1.start - o2.start); // ascending order
-        return (o1.end - o2.end);
+        // Sort ascending order with respect to start times
+        if(o1.start == o2.start)
+            return (o1.end - o2.end);
+        return (o1.start - o2.start);
     }
 }
 
 class MyCalendar {
-    private IntervalComparator comparator;
+
+    // TreeSet/SortedSet O(log n) insert & query
     private TreeSet<Interval> treeSet;
+    private Comparator comparator;
     
     public MyCalendar() {
         this.comparator = new IntervalComparator();
         this.treeSet = new TreeSet<>(this.comparator);
     }
     
-    // Total time: O(n * log n) OR O(log n) * 1000
-    // Total space: O(n) [Worst case, store all]
+    // Maintain a Binary Search Tree (TreeSet => RedBlack Tree)
     public boolean book(int start, int end) {
         Interval interval = new Interval(start, end);
+        Interval ceil = this.treeSet.ceiling(interval);
+        Interval floor = this.treeSet.floor(interval);
         
-        // O(log n) twice
-        Interval closestUpper = this.treeSet.ceiling(interval);
-        Interval closestLower = this.treeSet.floor(interval);
-        
-        // Early exits
-        if((closestUpper != null) && 
-           !Interval.areDisjoint(interval, closestUpper))
+        if((ceil != null) && interval.isConflicting(ceil))
             return false;
         
-        if((closestLower != null) && 
-           !Interval.areDisjoint(interval, closestLower))
+        if((floor != null) && interval.isConflicting(floor))
             return false;
         
-        // O(log n) once
-        // no conflicts with closest intervals
+        // Add i.e. book it
         this.treeSet.add(interval);
         return true;
     }
